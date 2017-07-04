@@ -2,8 +2,6 @@
 
 The scattered remains of old GMod project that I made in 2010-ish, from the days before I used proper version control. Originally intended to be a gamemode of humans vs antlions. See the GDD file for details.
 
-[![Gitter](https://badges.gitter.im/seltzy/antlions.svg)](https://gitter.im/seltzy/antlions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 This repo is broken into a few segments that were scattered between various hard drive backups.
 
 ## The projectA/B/C folders
@@ -16,3 +14,9 @@ Decompiled Source engine content staged for modifications.
 
 ## mapsrc
 Some maps used for development. Some of them are decompiled Source maps with and without edits, and some are from scratch.
+
+# Using/Contributing
+
+Do as you will with this. Visit the Gitter chat if you want to contribute or have questions about the code.
+
+[![Gitter](https://badges.gitter.im/seltzy/antlions.svg)](https://gitter.im/seltzy/antlions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
