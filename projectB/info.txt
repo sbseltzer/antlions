@@ -1,0 +1,21 @@
+"Gamemode"
+{
+	"name"		"Antlion Survival"
+	"version"	"1.0"
+
+	"author_name"	"Grea$eMonkey"
+	"author_email"	"geekwithalife@gmail.com"
+	"author_url"	"www.geekwithalife.com"
+	
+	"icon"		""
+	"info"		"Play in four action-packed modes that test your antlion survival skills!"
+	"hide"		"0"
+	
+	"mappattern"
+	{
+		"1"	"^als_"
+		"2"	"^antlion_"
+		"3"	"^al_"
+		"4"	"^as_"
+	}
+}

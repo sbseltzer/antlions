@@ -1,0 +1,23 @@
+- Antlion
+	- Leg rendering
+	- View bob
+	- Flight
+	- Drowning
+	- Thumper avoiding
+	- Burrow
+	- Seeing humans more clearly when humans are on the ground
+	- No button pressing
+	- No fall damage
+	
+- Antlion Guard
+	- Charge
+	- Head-butt
+	
+- Humans
+	- New weapons
+	
+- Game
+	- Spawn times
+	- Start game
+	- Battle zones
+	- End game

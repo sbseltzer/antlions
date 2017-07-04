@@ -1,0 +1,654 @@
+Antlion Survival GDD
+====================
+
+Antlion Survival is an intense campaign-based multiplayer game in which a rag-tag team of humans faces off against a vicious team of antlions.
+
+Game States:
+	Empty Server - nothing happens
+	First player joins - enter waiting stage
+	Waiting - server waits for enough players per team, then enters the pre-game stage
+	Pre-Game - countdown till the game stage begins, humans can volunteer for classes, antlions can freely move about the map.
+	Game - humans are assigned classes, they can leave the start area, game begins and stays in this state unless interrupted by some event.
+	Boss Fight - when humans trigger a boss fight, an antlion is selected as the antlion guard, music plays, humans cannot advance until the guard is defeated or the map signals an end to the boss fight. antlion respawn delay is slightly longer while the antlion guard is alive. Human HUD also changes to show boss health.
+	Game End - either humans reached the end zone, they all died, or they ran out of time. end-game HUD appears and scores can be viewed. countdown starts for post-game stage.
+	Post-Game - if both teams have not played as humans yet, teams swap and the game resets to the Pre-Game stage. otherwise, enter the next map stage.
+	Next Map - if the current campaign has a next map, autoselect it. otherwise, randomly select map or do a map vote. countdown is displayed for when the map changes.
+
+Assets:
+	Minithumper model/texture? Perhaps should be built out of existing props and animated in code.
+	Human Viewmodels (special hands for each class?)
+	Supply Human skin
+		Would look like medic skin, but instead have an ammo armband
+	High-resolution Antlion legs for antlion, worker, and guard
+		Will need new mesh for antlion, and possibly worker + guard
+		Will need new textures for each antlion skin, and the antlion guard skin
+	Models
+		Human hands?
+		Medkit viewmodel
+		Supplypack viewmodel
+		Power Cell viewmodel
+		Hopper Mine viewmodel?
+		Mini-turret viewmodel?
+		Mini-thumper viewmodel?
+		Antlion legs (plus skins)
+		Antlion Worker legs
+		Antlion Guard legs
+	Effect Images:
+		Checkpoint icon
+	GUI Images
+		Antlion class icons
+		Human class icons
+		Any derma skin images
+	HUD Images
+		Antlion health bar - like from the old alien games
+		Human damage texture
+		Antlion damage texture
+		Antlion Guard health bar for human HUD
+	Sounds
+		Boss fight music
+		Normal fight music
+		Antlion approaching motif
+
+Level Design:
+	Map Prefix: als_
+	Design Considerations:
+		Water is hazardous to Antlions.
+		Antlions cannot proceed past active thumpers, but can fly over them if they start at a high altitude.
+		The Human player hull is narrower than that of Antlions. In the same vain, Humans can crouch while Antlions cannot.
+	Standard Map Layout:
+		Human Start Area: Must be protected by a thumper that Antlions cannot get past.
+		Checkpoints: The first one should be protected by a thumper - introduces the most basic progress mechanic to players and gives them a simple start.
+		Bunker
+		Boss Fight
+		Bunker
+		Checkpoints
+		End Zone: This should NOT be protected by a thumper, otherwise, it would just make sense for humans to outright win when they enter.
+	Ready Room?
+		I like the idea of an NS2 style ready room for this game for its social effect on players, but I think it could take away from the campaign effect.
+	Types of Checkpoints:
+		Protected:
+			These are checkpoints that are usually in exposed locations that activate a thumper for protection. 
+			These are the majority of checkpoints, and generally will not have spawnpoints at it.
+		Unprotected:
+			These are checkpoints in semi-defensible locations. These may have spawnpoints for humans.
+			Assume that these checkpoints will trigger swarm mode for antlions, and be assaulted very aggressively upon human arrival.
+		Bunkers:
+			These checkpoints always have a resupply market for humans, and should be relatively safe for a short period of time.
+			Generally speaking, they will be structurally similar to the Unprotected checkpoints, but have a resupply market.
+			These could be protected by a thumper, or just provide a significant bottleneck for defensibility.
+			When not protected by a thumper, assume the possibility of triggering swarm mode for antlions.
+			These are best when loosely placed before and/or after boss fights.
+	Spawnpoints
+		The human team needs spawnrooms between checkpoints that have decently long distances (in terms of gameplay time) between them.
+		Be sure to place player spawns unassociated with spawnrooms at checkpoints (and associate with them) whenever possible, preferably in a room with a one-way exit.
+		Such spawnpoints must be disabled after the team has left that checkpoint. This is because spawnpoints unassociated with a spawnroom are given priority when available.
+		This can be done by putting some sort of trigger between that checkpoint and the next spawnroom.
+		IMPORTANT: 	If you use a one-way door in a bunker for an extra spawn area, there is the possibility of a player having spawned and simply staying in the spawn room. 
+					You MUST prevent that player from griefing by sitting there and losing the game for the human team. Use a trigger_hurt, trigger_teleport, trigger_push, anything to get them out.
+	Boss Fights
+		Humans should generally be unable to advance without defeating the boss.
+		If it is possible, be sure you add a trigger that force-ends the boss fight when players advance past the area that the boss can traverse.
+		Humans should not be able to retreat either, and thumpers and small areas that the boss can't reach should not be present.
+		The boss fight should not trigger until the vast majority of players have entered the boss area.
+		If a cliff is used to prevent players from retreating, ensure that Antlion Soldiers can reach it so that leaving a few players behind does not give the Human team an advantage against the boss.
+		
+Entities:
+	als_base:
+		Custom base entity with I/O handling that interfaces with Gamemode events.
+		Keys will start with "On", values will be formatted as "<target name>:<input name>:<parameter>:<delay>:<max times to fire (-1 == infinite)>"
+	als_info_game:
+		Contains game-specific information about the map.
+		Properties:
+			Game Time Limit (optional) - If specified, humans will have a game timer that acts as a lose condition.
+			Human Initial Spawnpoint - Sets the available spawnpoints for the human team for the start of the game.
+			Antlion Initial Spawnpoint - Sets the available spawnpoints for the antlion team for the start of the game.
+		Inputs:
+			ToggleTimer - Toggles the paused status of the game timer.
+			AddTime - Adds time to the time limit for humans to complete the map. Does nothing if no initial time limit was specified.
+			DisplayMessage <teamid,msg> - displays a message to the specified team
+			StartBoss <spawnpoint> - tells game to select an antlion guard and spawns them at a random spawnpoint of name <spawnpoint>. cannot be fired while a boss fight is active.
+			EndBoss - ends the boss fight state, and forces the boss to retreat (burrow?)
+			StartSwarm - force start swarm mode
+			EndSwarm - force end swarm mode
+			EndGame <teamid> - force ends game with winner teamid. Used for when humans reach the end of the map.
+		Outputs:
+			OnStartBoss - triggered when StartBoss is fired.
+			OnEndBoss - triggered when EndBoss is fired. (when the boss created by StartBoss is killed this will automatically be fired)
+			OnStartSwarm - triggered when StartSwarm is fired.
+			OnEndSwarm - triggered when EndSwarm is fired.
+			OnEndGame
+	als_info_checkpoint:
+		Defines progress for the human team and controls what spawnpoints are active for both teams.
+		Humans can see a HUD icon through walls showing them where the next checkpoint is.
+		Properties:
+			Next Checkpoint
+			Thumper (optional) - Auto-activates the specified thumper when reached.
+			Auto Swarm (def: Yes) - If this checkpoint has no associated thumper and auto swarm is set to yes, it will auto trigger swarm mode upon activation.
+		Inputs:
+			Activate
+		Outputs:
+			OnActivate - Triggered when this checkpoint is activated.
+	als_prop_thumper:
+		A custom version of prop_thumper.
+		Antlions cannot approach their radius.
+		To Avoid Abuse:
+			We don't want humans lingering in the Thumpers for too long.
+			If a human stays in its radius for more than 60 seconds, it will power down, and will not reactivate for another 120 seconds.
+			To prevent players from stepping in and out of the radius to keep it active, a player will count as being in its bounds for 10 seconds after they've left.
+		Effects:
+			Visual radius effect that appears when active - green for humans, red for antlions.
+		Properties:
+			Name
+			Start Active
+			World Model
+			Radius
+		Inputs:
+			Enable
+			Disable
+			Toggle
+	als_prop_market:
+		An entity that when used opens the market menu. It appears as a combine armor station, but with a blue color scheme.
+	als_point_spawnroom:
+		Properties:
+			Name
+			Start Open (def: No)
+			Door (optional) - A prop_door or func_door entity that automatically changes the spawnroom's open/close state.
+			Camera - An info_target marking the start position of the 3rd person camera used by trapped players. This gets clamped by the min/max view radius. If left undefined, the game will attempt to pick a spot.
+			Min View Radius (def: 200)
+			Max View Radius (def: 400)
+		Inputs:
+			Enable
+			Disable
+			Open
+			Close
+	als_info_human_spawn:
+		Properties:
+			Name
+			Team - Human or Antlion
+			Start Disabled (def: No)
+			Checkpoint (optional) - Checkpoint to associate with. This makes the spawnpoint usable ONLY while the checkpoint is the currently reached one. This takes precedence to the spawnpoint enabled status.
+			Spawn Room (optional) - Spawnroom to associate with. This makes the spawnpoint usable ONLY when the spawnroom is in the "Closed" state. Players that spawn from it have their Trapped flag set.
+		Inputs:
+			Enable
+			Disable
+			Toggle
+	als_info_antlion_spawn:
+		Properties:
+			Name
+			Team - Human or Antlion
+			Start Disabled (def: No)
+			Checkpoint (optional) - Checkpoint to associate with. This makes the spawnpoint usable ONLY while the checkpoint is the currently reached one. This takes precedence to the spawnpoint enabled status.
+			Spawn Radius (def: 0) - Specifies a distance away from the spawnpoint in which players can choose to spawn.
+			Spawn Action (def: None) - Specifies what happens when the player spawns. None spawns the player normally. Burrowed spawns the player burrowed. Unburrowing does the same thing as Burrowed, but also unburrows them. The Burrowed and Unburrowing options are changed to None if the spawnpoint is not in a als_trigger_burrow_area.
+		Inputs:
+			Enable
+			Disable
+			Toggle
+	als_trigger_team:
+		Useful for detecting when some fraction of a team has passed a certain point or entered/exited a certain area.
+		The fraction only counts living players that are not marked as Trapped.
+		Intended Use-Cases:
+			1. Checkpoint - Filling a checkpoint area with the brush and using OnTouched for activating the checkpoint. (Fraction: 0.25)
+			2. Bunker - Filling a bunker with the brush and using OnEndTouch for disabling bunker spawnpoints after most of the team has continued. (Fraction: 0.5)
+			3. Boss Fight - Filling the boss area with this brush and using OnStartTouch for starting the boss fight, and OnEndTouch for forcibly ending it. (Fraction: 0.85)
+			4. End Zone - Filling the End Zone with the brush and using OnStartTouch for ending the game with Humans as the winners. (Fraction: 0.75)
+		Properties:
+			Team (def: Human) - Which team triggers it.
+			Use Case (def: Checkpoint) - For consistency's sake, you may choose one of the Intended Use-Cases that use preset logic for determining whether to trigger.
+			Fraction Override (optional) - Overrides the Usage property with a custom fraction to check against.
+		Outputs:
+			OnTouched - Triggered when the correct fraction of unique entities that pass the filters has touched the trigger at some point.
+			OnStartTouch - Triggered in the first moment of the correct fraction of unique entities that pass the filters is touching the trigger.
+			OnEndTouch - Triggered in the last moment of the correct fraction of unique entities that pass the filters is touching the trigger.
+	als_trigger_nofly:
+		Defines an area in which antlions cannot actively fly. 
+		If an antlion is caught flying within its boundaries, the action will be cancelled.
+		This is useful for setting a hard limit on antlions trying to go places they shouldn't, but doesn't feel natural.
+	als_trigger_flylimit:
+		An area that defines the max height antlions can ascend from the point they started from.
+		This makes the loss of flight feel more natural, however, it's harder to guarantee limitations.
+		Since this only affects antlions the moment they take off, they may be able to fly somewhere else without a limitation, which adds potential for exploitation.
+	als_trigger_burrow_area:
+		Defines an area in which antlions may burrow/unburrow.
+	als_func_burrow_wall:
+		Defines an invisible wall that cannot be breached by burrowed antlions.
+		Should always surround burrow areas.
+
+Effects:
+	Radius Effects:
+	Gib Explosions:
+	Silhouette Effects:
+	
+Gameplay In General:
+	Both teams are best when sticking in groups. It may be best to bolster the power of each player in groups to encourage teams to stick together.
+	Gameplay should be fast-paced and pressured with intermittent calm times.
+	Ideally, we end up with a good balance of ambushes and onslaughts from the antlion team, and a balance of intense run-and-gun and defence scenarios on the human team.
+	I want antlions setting up ambushes between checkpoints and swarming at vulnerable checkpoints.
+	I want humans to be wary of stepping on sand and walking in open areas. I want humans to be on edge as they approach certain checkpoints.
+	Idea for Antlions: Swarm
+		At certain points in the game, Antlion spawn rates become instant for a limited time, encouraging constant swarming that snowballs.
+		You could say for each human killed or perhaps for each X damage dealt, Swarm Mode time limit gets extended.
+		The idea here is to have points in the campaign where Antlions can turn the tables without coordination.
+		Ideally, spawn delay would be parabolic, in that it decreases and then increases to take the pressure off.
+		This should probably happen whenever humans reach a checkpoint with no associated thumper (such as bunkers).
+		This would also have to scale according to team size, such that the aggregate DPS of the antlion team multiplied by the max swarm time does not exceed some relative total "defensibility" of the human team.
+	Idea for Humans: Banding
+		Under certain conditions (or maybe all the time) Human power and defence scales with group size.
+		Ideally, human stats would be logarithmic, in that it drastically increases at first, and eventually tops out as the group gets larger.
+		This might be broken if it were all the time. Perhaps only when humans are "stationary", in that the only humans that get this bonus are ones that haven't left a certain relative radius for some amount of time.
+		This would also have to scale according to team size, such that the total damage output of the human team does not exceed some relative total health of the antlion team.
+	
+Game Systems:
+	Entity Checker:
+		Checks all map entities:
+			Delete invalid ones and output debug info.
+			Weapons and items are removed.
+	Events:
+		Add custom hooks that interface with I/O handling on derivatives of the custom base entity.
+	Progress:
+		Dependent on map-placed checkpoints.
+		Initialization:
+			Get all als_info_checkpoint entities.
+			If there are none, this is not a campaign map.
+			Otherwise, reconstruct the checkpoints from their singley-linked-list representation to an array representation.
+			Ensure there's a connection between the ent and the array ID.
+			Store associated thumpers/spawnpoints/spawnrooms/etc.
+		Events:
+			When an als_info_checkpoint's OnActivate output is triggered, update the last reached checkpoint, activate/deactivate any associated thumpers/spawnpoints.
+			Might be fun for humans to cheer when they arrive.
+	Team Balance:
+		The start of the round must ensure teams are balanced.
+		Team balance through the course of the game should probably be up to the server owners.
+		This could be partially remedied by adding bots.
+	Rounds:
+		To give all players a chance to play the map as each team, we need to have a solid round system.
+		Map Reset:
+			Ensures the map is in the state is started in.
+			Must reset all triggers/map-placed entities properly.
+		Team Swap:
+			Teams must swap with one another.
+			In the case that teams became imbalanced during the round, it would be nice to have bots.
+	Human Respawning:
+		When a human player respawn delay expires, they will often respawn trapped in a spawnroom (much like L4D). These rooms should always be ahead of where the human team currently is.
+		In cases where the human team has already passed the spawn room, trapped players need a way to rejoin the game. We also don't want griefers to leave people trapped for the entirety of the game.
+		To mitigate this issue, mappers should add a spawnpoints inside of relevant checkpoints (like bunkers) that are unassociated with a spawnroom.
+		Initialization:
+			Find all als_point_spawnroom entities and their associated spawnpoints/checkpoint.
+		Events:
+			When a human is trying to select a spawnpoint:
+				Add all currently enabled spawnpoints associated with the current checkpoint to the list of possible spawns.
+				Remove all spawnpoints associated with an Open spawnroom from the list.
+				If the list is empty, we have a problem - this case should never occur, but if it does, spawn them next to a player on their team.
+				Check all spawnpoints not associated with spawnroom. If one is available, return that spawnpoint.
+				Check all spawnpoints associated with spawnroom. If one is available, return that spawnpoint, spawn the player, and flag them as Trapped.
+				Idea:
+					If multiple spawn rooms are available, perhaps give the player control over which one they spawn in?
+			When a checkpoint is reached:
+				All players currently flagged as Trapped are silently killed and restart the spawnpoint selection process immediately.
+	Antlion Respawning:
+		When an Antlion player respawn delay expires, we want them back in the action ASAP. We want to simulate swarming with Antlions.
+		I'd like to do a spawnpoint selection system for antlions. While dead, they can cycle through available spawnpoints and click on the spot they wish to spawn.
+		Spawn Radius:
+			Antlion spawnpoints have a radius setting. If it's greater than 0, the player may choose a point in that radius to spawn at.
+			The player does so by clicking the position on the ground they wish to spawn at. A marker effect will appear where they click.
+			If the marker is red, it's an invalid position. If it's green, it's valid, and the player will be notified that they can spawn by pressing a key.
+			Spawn Position Validity:
+				Player-selected positions must pass the following tests.
+				1. The player clicked on the world.
+				2. If the Spawn Action keyvalue is set to Burrowed/Unburrowing, the position must be in a burrow zone.
+				3. The player hull would not intersect with any physical objects.
+				4. The surface normal is generally pointing up.
+				5. Do a series of traces in a spherical pattern using the player's bounding radius to see if they might spawn stuck in the world.
+			Note: Spawn position is the selected position plus some constant vector in the up direction.
+			Note: We must take care to make sure the player can only select a position on the surface the spawnpoint rests on. We can't deny the possibility of there being visible space below that surface.
+		Spawn Action:
+			Antlion spawnpoints have a setting for how the player spawns.
+			Available Actions:
+				None:
+					The player spawns normally. They simply materialize on the spot.
+				Burrowed:
+					The player spawns in the burrowed state.
+				Unburrowing:
+					The player spawns in the burrowed state, and then is immediately forced to unburrow.
+			Note: If the spawnpoint is not in a burrow zone, the Spawn Action keyvalue must be forced to switch to None.
+	Collisions:
+		Players have soft-collisions with their own team, and hard collisions with opposing teams.
+	Points:
+		Add a points variable for humans that can be modified.
+	Boss Fights:
+		When an als_info_game's OnStartBoss output is triggered, set the state accordingly, randomly select an antlion player to act as the boss, start boss music.
+		After the boss player dies, fire the als_info_game EndBoss input.
+		When the als_info_game's OnEndBoss output is triggered, set the state accordingly, and if the boss player is still alive, gracefully end them by forcing a retreat into the ground, and respawn that player.
+	Tremor-Sense:
+		Available to the Antlion team.
+		What Antlions Look Like:
+			Burrowed antlions will always appear as a silhouette underground within a certain range.
+			Unburrowed antlions will always appear as normal, or with a halo effect when behind walls within a certain range.
+		What Humans Look Like:
+			While unburrowed, antlions will see humans through walls with a halo effect within a certain range.
+			While burrowed, antlions will see touch effects whenever physical objects or humans move on the sand/dirt within a certain range.
+			The touch effect appearance may be changed, but here are some ideas:
+				Show a radar-like ripple effect.
+				Show a transparent representation of the object that touched it.
+			Other Mechanic Ideas:
+				Player visibility changes based on how fast they move.
+				If all trcmors look the same, humans could potentially trick antlions into surfacing by throwing an object.
+				The meta could evolve from there by having humans slowly bunny hop to get some distance by tricking antlions into not surfacing.
+	Antlion Burrowing:
+		Events:
+			Whenever an Antlion is fully inside an als_trigger_burrow_area, their BurrowArea is set to that entity. Whenever they exit, if the one they are exiting is the same as the one they have set, their BurrowArea is set to nil.
+			Antlions have a CanBurrow method that returns true if and only if their ground entity is the world and their BurrowArea is set.
+			When an Antlion attempts to burrow:
+				1. Check if CanBurrow returns true.
+				2. Make sure they're not currently burrowing or unburrowing.
+				3. Begin burrowing.
+			When an Antlion attempts to unburrow:
+				1. Check if CanBurrow returns true.
+				2. Make sure they're not currently burrowing or unburrowing.
+				3. Begin unburrowing.
+			While Burrowing:
+				1. The player's view will be set to 3rd person.
+				2. The player's movement is frozen and their animation is set accordingly.
+				3. The player can take damage until the moment they are below the surface.
+			While Unburrowing:
+				1. The player's movement is frozen and their animation is set accordingly.
+				2. The player cannot take damage until the moment they are above the surface.
+				3. The player's view will be set to 1st person.
+			While Burrowed:
+				The player is unfrozen.
+				The player will be turned invisible (leaving only tremorsense effects).
+				Humans will be turned invisible to the player (leaving only tremorsense effects).
+				The player's speed will be set accordingly.
+				The player will contribute to tremors for human players.
+				All als_func_burrow_wall entities will return true for the player in the ShouldCollide hook.
+				The player will slowly regain health over time.
+	Death:
+		While players are dead, several changes take place.
+		Chat Limitations:
+			Dead players cannot interact with living ones.
+		Death Cam:
+			A TF2-like death cam is used for a few seconds following death.
+			To avoid having a tacky TF2 look, I'd like to do something fancy for this.
+			Upon death, go into 3rd person and show your death in slow-motion, whipping the cam around you and gradually having it arrive at the player who killed you, where it freezes with stats just like in TF2.
+			The camera then transitions to Spectate Mode with a Death Screen overlay.
+		Spectate Mode:
+			Players are put into a 3rd person spectate mode, limited to spectating players on their own team.
+		Death Screen:
+			Since players could be dead for a while (especially humans) we need some interactivity available while waiting to spawn to ease any negative frustration.
+			Both teams have a similar GUI that is displayed upon death. Something interactive that shows your overall stats, how you did since you last died, etc.
+			Think TF2, but with the interactivity of the endgame GUI in Smite.
+			Appearance:
+				After any death cam animations have played, transition to death screen.
+				Do the standard film style with the top and bottom black bars.
+				Bottom Screen:
+					Have a few horizontally laid out, clickable bullet points that change what the player looks at (like in Smite).
+					Upon clicking, we do a nice slide animation that brings in an overlay UI/HUD
+					The first button gives us a normal spectate mode, freeing up screen space so the player can watch the game.
+					The proceding buttons bring up statistics for the player to look at.
+				Middle Screen:
+					Middle left/right will have respective arrow icons that perform the same function as the bottom bullets, but in a next/previous fashion.
+					While spectating a player, right/left clicking the mouse on a non-GUI element cycles the currently spectated player.
+				Top Bar:
+					Top left corner shows a visual representation of human progress (Some dots with lines between them, with human progress shown via line color)
+					The top middle shows text labeling what bullet you're on (i.e. "Spectate: <Player Name>", "Your Stats", "Game Stats", etc.)
+					The left/right middle portion of the screen have respective arrow icons.
+				Bottom Bar:
+					Bottom left corner has the text "XXX.XX seconds till spawn".
+					Bottom middle has random tips text.
+					Bottom right corner has a "Change Class" button for Antlions.
+					When the spawn delay timer expires, the middle bottom of the screen will say "Press any key to Respawn".
+						When a key is pressed, players enter spawn selection mode.
+			Some Statistic Ideas:
+				Number of Kills/Deaths(/Assists)?
+				Number of checkpoints reached
+				Damage inflicted
+				Damage taken
+				Accuracy
+				Who killed you
+	Help Menu:
+		Like any other gamemode, we need an F1 help menu.
+		This will need to get filled out later.
+	Bots:
+		I'd like to have bots integrated eventually to fill space.
+		Would also allow for a nice AFK mode, however, if we do that, we'd need a timeout for when to kick AFK players.
+		
+Human Team:
+	Win Condition: The vast majority of humans reach the end zone.
+	General Properties:
+		They have ranged attacking available from the get-go.
+		Not as fast as antlions, but have more health and the advantage of being able to damage multiple antlions at once due to bullet spread.
+	Classes:
+		Soldier
+			Spawns with a melee weapon and a ranged weapon.
+		Medic (several are randomly assigned at start)
+			Spawns with a med-kit that recharges over time instead of melee weapon.
+		Supply (several are randomly assigned at start)
+			Spawns with an ammo-kit that recharges over time instead of melee weapon.
+	Resupply Market:
+		Bunkers will have resupply stations where humans can buy ammo, items, and weapons.
+		Humans spend points earned by performing well.
+		Points are earned by:
+			Killing an antlion - 1
+			Reaching a checkpoint alive - 5
+			Defeating the antlion guard - 10
+		Points are lost by dying.
+	Respawn:
+		L4D style "trapped" scenario. The player will not enter this state until they say they're ready to respawn.
+		Spawn delay is considerably longer than that of Antlions, mayber 30 seconds.
+		To make it possible for antlions to win, killed humans respawn with limited ammo and/or less powerful weapons.
+	Effects:
+		Tremors:
+			When antlions unburrow themselves, they cause a tremor effect (screen shake) for nearby humans.
+			The more antlions unburrowing, the more the screen shakes.
+	Display:
+		Look and Feel:
+			Should have a rough, rag-tag kind of feel. Imagine anything made by the Rebels in HL2, that kind of feel.
+		HUD:
+			Health
+			Ammo
+			Damage
+			Boss HP
+		GUI:
+			Class volunteering
+				Only available at start of game
+				Enters the player into a list of players to randomly select from
+			Resupply market menu
+			While dead, you will have the option to change class if a spot is available (i.e. a player disconnected).
+			Death Screen
+	Weapons:
+		Medkit / AED?
+		Supplykit
+		Crowbar
+		Pistol
+		SMG
+		AR21
+		Bugbait? - perhaps available after an antlion guard has been defeated?
+			This would create an illusion of a human player for antlions. It would need to be fairly convincing.
+			Could add a post-processing effect on antlions that are hit by it that makes it hard to aim/see.
+	Items:
+		Items are entities that are held like weapons, but have a clear manifestation upon usage.
+		Power Cell - carries a charge that can be used on mini-thumpers and mini-turrets. charge is applied via primary fire.
+		Hopper Mines - proximity mines that are difficult for antlions to see. only weapon that can trigger on and damage burrowed antlions.
+		Mini-Turret - an automated turret that mows down antlion swarms. requires power cell. once placed, it cannot be moved until it runs out of charge.
+		Mini-Thumpers - a miniature thumper with a limited charge and small radius. requires power cell. once placed, it cannot be moved until it runs out of charge.
+	Dropping/Giving:
+		Humans should have the ability to share resources.
+		If a human presses "Use" on a teammate, they get a UI popup that allows them to give that player something, or initiate a trade.
+	Bot Behavior:
+		Soldier
+			Follows the largest group of players, but will gravitate toward checkpoints when that is not an option.
+			Shoots Antlions on sight depending on their weapon range/ammo.
+		Medic
+			Same as Soldier, but will periodically heal the player with the lowest health.
+		Supply
+			Same as Soldier, but will periodically supply the player with the lowest ammo.
+	
+Antlion Team:
+	Win Condition: All humans are dead, or they ran out of time.
+	General Properties:
+		Have stamina that is expended for running, flying, and attacking.
+		They do not take fall damage.
+		Faster and stronger than a single human, but attacks are less frequent and often focused on single-targets.
+		Perform best in ambush situations.
+	Limitations:
+		Water:
+			Antlions take massive damage while underwater, and their movement is severely limited.
+			Antlions cannot fly, burrow, or attack when in water.
+			If they leave the water after taking damage from it, they will quickly regain health lost that way.
+		Active Thumpers:
+			Antlions are forced to avoid thumpers, burrowed or no.
+			Antlions cannot attack, fly, or burrow while on the ground within the radius of a thumper.
+			Burrowed antlions cannot unburrow within the radius of a thumper.
+	Abilities:
+		Attack:
+			Antlion melee attacks are powerful and cause knockback.
+		Flying:
+			Most antlions have the ability to fly a limited distance by holding down the jump key.
+			This can be used in two distinct ways:
+				1. Quickly traverse a long distance at low altitude (lateral motion).
+				2. Slowly traverse a short distance at high altitude (vertical motion).
+			Antlions do not have fall damage, but they can damage things they fall on. This includes humans.
+		Burrowing:
+			Most antlions have the ability to burrow underground and move about unseen in select locations.
+			It takes a few seconds to burrow, which leaves the player exposed for attack, however, they will slowly regain health underground.
+			It takes a couple seconds to unburrow, and causes a tremor effect for nearby humans which alerts them to antlion presence.
+			While burrowing/burrowed/unburrowing, antlions go into a 3rd person view.
+		Tremor-Sense:
+			Antlions have are able to perceive movement on certain surfaces, such as sand.
+			While burrowed, the ability to see humans is limited to their tremor-sense.
+			While unburrowed, tremor-sense allows antlions to see humans through walls.
+	Respawn:
+		Spawnpoints are selected based on where humans are.
+		Almost instantaneous, however, the player won't spawn until they say they're ready.
+	Classes:
+		Antlion Soldier
+			Stats:
+				High mobility (can burrow and fly long distances, very fast)
+				Average damage
+				Average health
+			Special Qualities: 
+				None
+		Antlion Worker (unlocked after some progress)
+			Stats:
+				Average damage (considerably lower damage on melee attack)
+				Average mobility (can burrow and fly short distances)
+				Low health
+			Special Qualities:
+				They can perform short dodges by tapping the jump key while moving any direction other than forward.
+				Ranged attacks with poison damage
+				When killed, they spray acid in a small explosion
+		Antlion Guard (randomly assigned at certain times)
+			Stats:
+				High health
+				High damage
+				Low mobility (cannot fly or burrow, only fast when charging)
+			Special Qualities:
+				Charging
+				Roar
+				Pheremones (ranged attack that marks humans as visible to tremorsense no matter where they are)
+	Effects:
+		Tremor-Sense:
+			This is open to discussion for how this is represented.
+	Display:
+		Look and Feel:
+			Should have an organic feel. No text or numbers, just geometric representations.
+		HUD:
+			Health
+			Stamina
+			Damage
+		GUI:
+			While dead, you will have the option to change class if others are available.
+			Death Screen
+	Bot Behavior:
+		We could potentially just use NPCs for this.
+		
+Roadmap:
+	Version 0.1: Primary Features (4 weeks)
+		All game states excluding Boss Fight and Next Map
+		Create test map
+		End-game conditions
+		End Zone (game ends if one human can reach it)
+		Timers
+		Checkpoints
+		Thumpers
+		Antlion Soldier class
+			attack
+			stamina
+			flying
+			burrowing
+			drowning
+			tremor-sense
+		Antlion respawning
+		Human Soldier class
+		Human respawning (just respawn at checkpoints)
+		Basic HUD (health/ammo for humans, health/stamina for antlions)
+		Basic tremor-sense for antlions (humans are simply invisible when not on ground)
+		
+	Version 0.2: Secondary Features (4 weeks)
+		Add Boss Fight and Next Map game states
+		Bunkers
+		Resupply Market GUI
+		Medic/Supply Human classes
+		Human Class Volunteering GUI
+		Worker/Guard Antlion classes
+		Antlion Class Selection GUI
+		Human respawning (L4D style)
+		End Zone (game ends if some fraction of the humans can reach it)
+		Death Screen
+		End Game Screens
+		
+	Version 0.3: Tertiary Features (2 weeks)
+		Human Weapons - custom versions
+		Human Items:
+			Power Cell
+			Mini-thumper
+			Mini-turret
+			Hopper Mines
+	Version 0.4: Debug (2 weeks)
+		This phase is dedicated to fixing bugs.
+		
+	Version 0.5: Clientside Beautification (4 weeks)
+		Custom sounds, textures, and models should be completed at this point
+		Blend antlion model alpha when transitioning between 1st and 3rd person views.
+		Antlion legs
+		Antlion bullet impact effects
+		All player sounds (i.e. pain, landing, etc.)
+		Better looking tremor-sense
+		Tremor effect for humans
+		Add halo effect to humans flagged as Trapped
+		Make all GUIs look nicer (i.e. styling and textures)
+		Custom HUD:
+			Human health
+			Human ammo
+			Human damage screen effects
+			Antlion health bar
+			Antlion stamina bar
+			Antlion damage screen effects
+		Custom Scoreboard
+		Help Menu
+		Add custom sounds
+		
+	Version 0.6: Private Alpha Testing (2 weeks)
+		This phase is dedicated to gameplay tuning.
+	Version 0.7: Limited Beta Testing (2 weeks)
+		This phase is dedicated to gameplay tuning.
+		
+	Version 0.8: Level Design (4 weeks)
+		Polish the FGD files.
+		Finish creating/debugging the first campaign.
+		Start making the second campaign.
+
+	Version 0.9: Public Testing (4 weeks)
+		This phase is dedicated to gameplay tuning.
+		
+	Version 1.0: Public Release
+		The gamemode is essentially complete.
+		It is ready for server owners to use.
+		
+	Version 1.1: Extras
+		Bots - this is a big one.
+		Dropping/Giving system
+		Weapon/Item upgrades
+		Branching checkpoint system?
+		Custom Chatbox theme?
+		Custom Loading screen?

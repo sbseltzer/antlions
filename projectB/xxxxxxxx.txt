@@ -1,0 +1,59 @@
+Defining Game Rules
+    Rebel/Antlion Respawn Delays
+    Sand Mat Types
+The Spawn Area
+Starting the Game
+General Game Flow
+Battles
+    Battle Mode
+    Battle Volume
+    Antlion Spawns
+    Antlion Guard Fights
+Ending the Game
+Misc.
+    Thumpers
+    Mounted Guns
+    Progress Spawns
+    Using trigger_satisfy
+
+
+trigger_satisfy
+antlion_game_rules
+antlion_game_events
+antlion_battle
+prop_mountedgun
+prop_thumper
+info_player_antlion
+info_player_antlion_guard
+info_player_progress
+
+
+
+Stuff you can do with Battles - L4D-Like examples:
+	Defense: Make it a Timed battle that's triggered by pressing a button to bring a lift down.
+	Gauntlette: Make it a Trigger battle that will continue until all rebels have passed over a long stretch of land.
+	Finale: Do a Timed AND Trigger battle where they must wait for an extraction team to arrive. The rescue comes when the timer running out is triggered, but the battle ends when all survivors have triggered something.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

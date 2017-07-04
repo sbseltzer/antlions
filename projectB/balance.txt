@@ -1,0 +1,21 @@
+Balance - This file is to outline advantages/disadvantages for each team
+
+Antlions
+	Flying
+	Burrowing
+	Powerful in swarms
+	Element of surprise
+	Able to pin down rebels
+	Have antlion guards/guardians/workers
+	Have faster respawn times
+	Take more damage
+	
+Rebels
+	Guns
+	Special equipment
+	Thumpers
+	Powerful in groups
+	Able to flip antlions
+	Have medics
+	Have slower respawn times
+	Take less damage

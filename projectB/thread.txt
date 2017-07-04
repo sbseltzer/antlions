@@ -1,0 +1,30 @@
+Antlion Survival
+
+Antlion Survival is a bit of a side-project. It's a team-based gamemode where you can play as a Rebel Survivor or an Antlion.
+
+[b]So it's exactly like Zombie Survival but with antlions?[b]
+No. It has more of an L4D twist to it. It doesn't follow the same game mechanics that you might have seen in ZS.
+
+[b]Can you play as antlions and all their different types like workers and guards?[/b]
+Yes. There will be times where you can play as an Antlion Worker, Antlion Guard, and even the Antlion Guardian.
+
+[b]What can each team do?[/b]
+Aside from the normal attacks that antlions can perform, they also have the ability to burrow and fly.
+They also have the element of surprise. They could be anywhere: high above on a cliff, or strategically positioned to ambush from underground.
+Rebels have technology on their side. Rebels have a wide array of equipment to combat antlion swarms.
+Aside from their standard rebel weapons, they have cool gadgets such as miniature thumpers to deploy in emergencies, allied rollermines/hoppermines/landmines, and combine turrets.
+
+[b]Game Premise:[/b]
+During the war on the Combine, many rebels found refuge in the deserts and coastlines outside of Nova Prospekt. Unfortunately, no one told them there would be an antlion problem.
+
+[b]Won't this get boring after a while?[/b]
+Everything gets boring eventually, but to keep interest, this gamemode will come with four different modes.
+
+Campaign
+	Rebels must cross an antlion-infested map to the next rebel camp.
+Survival
+	Rebels must survive until an extraction team arrives.
+Scavenge
+	Rebels must journy outside the safety of their thumpers to rerieve batteries to keep the thumpers powered.
+Extraction
+	Rebels must infiltrate the antlion hive and retrieve the extract.

@@ -1,0 +1,23 @@
+"Gamemode"
+{
+	"name"			"Antlion Survival minimal"
+	"version"		"1.0"
+
+	"author_name"	"Samuel \"GreaseMonkey\" Seltzer-Johnston"
+	"author_email"	"geekwithalife@gmail.com"
+	"author_url"	"www.geekwithalife.com"
+	
+	"icon"			""
+	"info"			""
+	"hide"			"0"
+
+	"mappattern"
+	{
+		"1"			"^as_"
+		"2"			"^als_"
+		"3"			"^antlion_"
+	}
+	
+	"selectable"	"1"
+	"description"	""
+}

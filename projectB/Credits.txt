@@ -1,0 +1,5 @@
+Grea$eMonkey
+NightExcessive - Lua support
+Tobba - Lua support
+Foszor - Wrote the original antlion player code
+Ralle - Helped with rendering code

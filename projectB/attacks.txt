@@ -1,0 +1,93 @@
+Attacks
+
+Melee Attack - Single
+	Key = ATTACK1
+	Anims =
+		attack1
+		attack3
+		attack4
+		attack5
+	Notes = 
+		
+Melee Attack - Double
+	Key = ATTACK1 x2
+	Anims =
+		attack2
+		attack6
+	Notes = 
+
+Charge Attack - only for normals
+	Key = SPEED + ATTACK1
+	Anims =
+		charge_start
+		charge_run
+		charge_end
+	Notes = 
+		
+Range Attack - only for workers
+	Key = ATTACK2
+	Anims =
+		spit
+	Notes = 
+		
+Pounce Attack
+	Key = ATTACK2
+	Anims =
+		pounce
+	Notes = 
+		
+
+
+Burrow In
+	Key = DUCK
+	Anims =
+		digin
+	Notes = 
+		
+Burrow Out
+	Key = JUMP
+	Anims =
+		digout
+	Notes = 
+
+Shoot Sand
+	Key = ATTACK1
+	Anims =
+		none
+	Notes = 
+	
+Land Attack
+	Key = None
+	Anims =
+		jump_stop
+	Notes = 
+		
+Ambush Attack
+	?
+	
+	
+	
+-------------------------------
+
+Primary - Attack
+	Attack5 - Speed = 33.25
+	Attack6 - Speed = 97.38
+	Pounce - Speed = 449.56
+	Charging - Pounce2 - Speed = 489.65
+	Burrowed - Ambush
+	
+Secondary - Burrow In
+	Burrowed - Burrow Out
+	
+Sprint - ?
+
+Jump - Fly
+	Fly wherever aiming.
+	Will descend eventually.
+	
+Charge - Speed = 354.9
+Pounce - Speed = 272.27
+Run - Speed = 354.9
+Strafe Left - Speed = 236.66
+Strafe Right - Speed = 227.75
+Walk - Speed = 195

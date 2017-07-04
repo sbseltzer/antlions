@@ -1,0 +1,6 @@
+thumper ladder 2 upper and lower dismounts are broken
+thumper ladder 3 upper dismount is broken
+thumper ladder 4 lower and upper are broken
+replace spawn area opening sound
+add gates
+add props

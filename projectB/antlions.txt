@@ -1,0 +1,201 @@
+Humans vs Antlions
+
+Like ZS but with antlions.
+
+Overall Premise:
+	It's in the middle of the war with the Combine. Many rebels have seeked refuge in the deserts and coastlines outside of Nova Prospekt.
+	No one told them there would be an antlion problem.
+
+
+General Notes:
+	Allow team voice chat
+	In campaign maps where thumpers exist along the way, they should start disabled, and be activated as players progress.
+	In campaign battle zones, antlion spawning is accellerated for a certain period of time or until the humans exit it.
+	Survival starts when all rebels have left the spawn area.
+	
+Maps:
+	coast01 - Good for survival or scavenge. Just block off water.
+	coast02 - nil
+	coast03 - Good for campaign or scavenge.
+	coast04 - Good for survival or scavenge.
+	coast05 - blah
+	coast06 - nil
+	coast07 - blah
+	coast08 - blah
+	coast09 - blah
+	coast11 - campaign, survival
+	coast12 - campaign, scavenge, survival
+	
+	
+Game Types:
+	Campaign - Humans need to get to the next rebel camp and avoid antlion ambushes.
+		Premise:
+			Resources have been depleted in the rebel's current camp, but word is that there's another rebel camp somewhere across antlion country.
+			The humans will need to cross antlion country and avoid antlion ambushes/attacks. They may even need to take down a few antlion guards.
+			For humans to win, they'll need to make it to the other rebel camp without dying.
+		Notes:
+			Humans have longer respawn times, and respawn at checkpoints.
+			Humans cannot respawn during antlion guard fights.
+			Could use augmented versions of hl2 maps.
+			Humans start at one end. Antlions spawn underground wherever the npc spawns are.
+			We will need trigger entities for game start, game checkpoints, game finish, and antlion guard fights.
+			Perhaps brush ents to block underground travel.
+			Battle Zones:
+				The campaign is broken up into battle intervals to slow things down and test human survival skills.
+				Battle zones should make it impossible to turn back once you've entered.
+				The mapper defines how the battle should start/end.
+					Timer - The battle is timed. Humans will have to survive for the specified time limit before an exit opens up.
+					Exit - The battle is only as long as the humans stay in the battle zone. As soon as the majority of them exit the battle zone, the battle will end.
+					Both - Either one of the above could end the battle.
+				When enough humans enter the battle zone, the battle should start. The exit should not be available until that amount of humans have entered.
+				At some point, the antlion guard may show up. The mapper can set what fraction of the battle must be completed before the guard shows up. This is only applicable to timed battles.
+	Defence - Humans must defend their camp from antlion attacks.
+		Premise:
+			The antlions have found the rebel camp and have decided to move in.
+			For humans to win, they'll need to defend the gates of their camp from being broken down until the timer runs out.
+		Notes:
+			Humans do not respawn.
+	Survival - Humans fight for survival until they all die.
+		Premise:
+			The rebels have no defense, and are trapped right in the heart of antlion country.
+			Their only hope is to defend themselves until help arrives.
+			For humans to win, they'll need to survive antlion attacks until an extraction team arrives.
+		Notes:
+			Humans do not respawn.
+			Water will need to be offlimits for humans.
+	Invasion - Humans invade the hive and wreck the place.
+		Premise:
+			The rebels have located the antlion hive, and decide to end all antlion reproduction in their region.
+			Humans will need to invade the hive and destroy whatever they can.
+			For humans to win, they will need to destroy 
+			However, they are on a time limit?
+		Notes:
+			Humans respawn slowly at the spawnpoint nearest the largest group of players on their team.
+	Extraction - Humans invade the hive and retrieve the extract.
+		Premise:
+			This substance known as "The Extract" has proven very useful for rebel medicine.
+			The humans will need to invade the hive and retrieve the extract.
+			There may be a few antlion guard fights, and even a fight with the antlion guardian.
+			For humans to win, they must take the extract and exit the hive alive with it.
+		Notes:
+			Humans respawn slowly at the spawnpoint nearest the largest group of players on their team.
+			Rebels are not allowed to kill the guardian until they've exited the hive with the extract.
+			We will need trigger entities for game start, game finish, and antlion guard/guardian fights.
+	Scavenge - Humans must find batteries to keep their thumpers charged so antlions don't get to the rebel camp.
+		Premise:
+			The antlions seem to have burrowed through a powerline that keeps the defense line of thumpers going.
+			A team of scientists are rerouting the power source, but it will take some time.
+			To keep the thumpers powered, the humans will need to travel outside the safety of their camp to gather batteries without being killed by antlion forces.
+			For humans to win, they'll need to keep recharging the thumpers until the timer runs out.
+		Notes:
+			Humans do not respawn.
+Teams
+	Humans (rebels)
+		Notes
+			Generally have more health than antlions.
+			There will often be fewer humans than antlions.
+		Classes
+			Medic
+			Soldier
+		Weapons
+			Gravity Gun - Used to knock antlions down and move materials on the sand 
+			SMG - A good medium range weapon with decent damage.
+			Shotgun - Deadly at close range.
+			Pistol - A good longer range weapon, but low on damage.
+			Crowbar - Powerful, but risky as it requires combat at close quarters.
+		Items
+			Soil Disruption Unit (SDU) or Compact Thumper Unit (CTU)? - Temporary mini-thumper. These can defend a small space against antlions.
+			Turret - A good defense against antlions, but it can only focus on one target at a time.
+			Explosive Mine - Good for defending narrow pathways. These can be burried in loose soil or sand.
+			Roller Mine - A good distraction as they will attack antlions autonomously until they die.
+	Antlions
+		Notes:
+			They will have avoid collisions with teammates and thumper radiuses.
+			Burrowing
+				Where can they burrow?
+					Sand/dirt mainly.
+					They would break through concrete when there was dirt underneath.
+					Maybe certain maps could define where they can burrow.
+				If there's a thick wall, they shouldn't be able to burrow under it.
+				When moving burrowed, they will always move just below the surface, even if it is uphill. View will stay forward-perpendicular to the surface.
+				If there's a ledge ahead, they will stop before reaching it.
+				You can only move forward while burrowing.
+				Staying burrowed will slowly recharge health, but antlions can be killed while burrowed if shot.
+			Pulse Vision - Used while burrowed to sense where players might be.
+				"Antlions rely on sound, not sight." - Perhaps we should make this their way of vision, and have it be more effective while underground.
+				Camera would be placed just above the ground where the antlion is burrowed.
+				All motionless props and players would be invisible.
+				Everything else would be very dark, but there would be just enough contour on the world to know where you are and what angle the ground is at.
+				Whenever something touches the ground, some kind of pulse would show up. Player foot steps would show up the most.
+				The visibility of these pulses depends on what kind of ground they step on. Sand would show up most.
+				If the antlion is burrowed in a different material than what the object is on, the pulse shouldn't show up.
+		Antlion Classic
+			Abilities:
+				Burrow
+				Unburrow
+				Fly
+				Hit
+				Charge - Can be used to lead into an attack.
+					Any attack directly following a charge doubles in damage, however, if you hit something without attacking, you will be knocked over and slightly damaged.
+				Pounce - More effective when done from a charge.
+					This can knock down other players.
+				Shoot Sand - Done from underground.
+					Used to fake an ambush.
+					Can be used to spook players.
+				Ambush - Done from underground.
+					Antlion unburrows and pulls the human down.
+			Notes:
+				Has a burrowing ability where they can travel underground (slowly).
+				Humans are invisible to you when they're not on the sand.
+				When anything touches sand, it shows up visually as movement. Humans could use this to trick antlions into ambushing too early.
+				Can shoot sand out of the ground to spook players. Antlions could use this to trick players into going in certain directions.
+				Maybe the ground should shake a little when antlions are burrowning underneath humans, and when large groups of antlions are charging.
+		Antlion Worker
+			Abilities
+			Notes:
+				Only available for Invasion and Extraction
+		Antlion Guard
+			Abilities
+			Notes
+		Antlion Guardian
+			Abilities
+			Notes:
+				Only available for Invasion and Extraction
+		
+Entities
+	prop_mine - used in all
+	prop_turret - used in all
+	prop_thumper - used in all
+	prop_thumper_small - used in all
+	info_player_antlion - used in all
+	trigger_antlion_guard - used in all
+	info_player_progress - used in all
+	
+	prop_extract - used in extraction
+	trigger_antlion_guardian - used in extraction
+	
+	prop_battery - used in scavenge
+	
+	trigger_game_start - used in campaign, invasion, and extraction
+	trigger_game_end - used in campaign, invasion, and extraction
+	trigger_game_checkpoint - used in campaign, invasion, and extraction
+	info_player_checkpoint - used in campaign, invasion, and extraction
+	
+Effects
+	antlion_burrow - whenever the antlion burrows
+	antlion_unburrow - whenever the antlion unburrows
+	antlion_shootdust - whenever the antlion uses its shootdust ability underground
+	antlion_burrowdust - whenever the antlion moves around underground?
+	thumper_dust
+Spawnpoints:
+	info_player_start/info_player_rebel
+	info_player_checkpoint
+	info_player_antlion
+		Type
+			1 - Classic
+			2 - Worker
+			3 - Guard
+			4 - Guardian
+		Burrowed - Only valid for classic
+			Yes
+			No

@@ -1,0 +1,111 @@
+
+Map spawns
+	GAME_STATUS_PREGAME - none
+	
+Pre-game timer starts - WaitForPlayers
+	GAME_STATUS_WAITFORPLAYERS - OnWaitForPlayers
+	
+Pre-game timer ends - WaitForStart
+	GAME_STATUS_WAITFORSTART - OnWaitForStart
+	
+game starts - StartGame
+	GAME_STATUS_INPROGRESS - OnGameStart
+	
+battle starts - StartBattle
+	GAME_STATUS_INBATTLE - OnBattleStart
+	
+battle ends - EndBattle
+	GAME_STATUS_INPROGRESS - OnBattleEnd
+	
+game ends - EndGame
+	GAME_STATUS_GAMEOVER - OnGameEnd
+	
+restarting - RestartGame
+	GAME_STATUS_RESTARTING - OnGameRestart
+	
+players respawn - WaitForStart
+	GAME_STATUS_WAITFORSTART - OnWaitForStart
+	
+Repeat all
+	...
+	
+game ends
+	GAME_STATUS_GAMEOVER
+	
+map changes
+	
+
+Campaign
+	
+EARLY GAME:
+	First rebel spawns:
+		Pre-Game timer starts.
+		Spawn area is closed off for pre-game timer.
+	Rebels spawn in their spawn area:
+		Antlions are on hold, but have the option to choose where they spawn.
+	Pre-Game timer ends:
+		Spawn area opens up.
+		Rebels leave spawn area.
+	First rebel sets off trigger to game start.
+		Antlion spawning is activated.
+MID GAME:
+	Rebels campaign and survive.
+	Rebels set off triggers for progress/antlion spawns and battles.
+BATTLES:
+	Rebels set off battle zone triggers.
+	Timed:
+		Majority of rebels will probably need to pass a trigger_satisfy.
+		Rebels survive antlion spawning.
+		Battle ends when timer runs out and exit opens up.
+	Triggered:
+		Likely set up as a long field to rush though, or a form of obstacle to escape.
+		All rebels will probably need to pass a trigger_satisfy to end it.
+		Rebels escape and battle ends.
+	Either:
+		Both or the above hold true. The battle either ends when rebels escape, or when a timer runs out.
+END GAME:
+	All rebels pass a trigger_satisfy, game ends with a rebel victory result.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+Survival
+	
+EARLY GAME:
+	First rebel spawns:
+		Pre-Game timer starts.
+	Rebels spawn in their spawn area:
+		Antlions are on hold[, but have the option to choose where they spawn.]
+	Pre-Game timer ends:
+		Game waits for game start to be triggered
+	Start is triggered
+		All players who are not in the battle field get spawned in it
+MID GAME:
+	Rebels survive until timer runs out.
+END GAME:
+	All rebels pass a trigger_satisfy, game ends with a rebel victory result.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+Scavenge
+	
+EARLY GAME:
+	First rebel spawns:
+		Pre-Game timer starts.
+		Spawn area is closed off for pre-game timer.
+	Rebels spawn in their spawn area:
+		Antlions are on hold, but have the option to choose where they spawn.
+	Pre-Game timer ends:
+		Spawn area opens up.
+		Rebels leave spawn area.
+	First rebel sets off trigger to game start.
+		Antlion spawning is activated.
+		Game timer starts
+MID GAME:
+	Rebels gather and survive.
+	Rebels set off triggers for antlion spawns and battles.
+	Timer eventually runs out.
+END GAME:
+	Rebels kept all thumpers charged by the end of the game, game ends with rebel victory result.
+	Rebels were unable to keep all thumpers charged by the end of the game, game ends with antlion victory result.

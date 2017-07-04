@@ -1,0 +1,41 @@
+Antlion Survival - Brought to you by GModCentral[/endshamelessadvertising]
+
+Yes there will be a public release.
+
+Teams - Antlion Survival has two teams. You can choose between playing on the Rebel team or Antlion team. Each team has it's own features.
+	Rebels - The main advantage rebels have over antlions is firepower and versitility.
+		Unlike antlions, rebels are not limited by their arms reach. They can get their hands on a variety of firearms and special equipment. The weapons are pretty simple. You've got your standard SMG, handgun, shotgun, etc.
+		Aside from boring weapons, rebels also have some fun toys to play with. Things like turrets, hopper mines, remote-controlled rollermines, and portable mini-thumpers.
+		Unlike antlions, rebels also have the ability to recieve health. When players first join, there will be a random selection of medics who have the ability to give health to their fellow teammates. This can be especially useful after prolongued battles.
+	Antlions - One of our testers noted "Never bring an antlion to a gun fight." Well, that was before we added stuff like burrowing and pouncing.
+		Antlions may be easy to pick off at long range, but they are deadly in close-quarters, and also possess the element of surprise.
+		Antlions can often move about unseen and unheard while burrowed, which makes it easy to sneak up on rebels. Antlions also have the ability to fly, and have greater mobility than rebels.
+		In addition to their special abilities, there are also times where the antlion guard is available for play. Under some circumstances, antlion workers and even the antlion guardian will be available.
+
+Notable features:
+	Game flow is ultimately crafted by the mapper.
+	Antlions avoid thumpers, and cannot survive in water.
+
+Modes - Antlion Survival is not just your plain survival gamemode. Rather, it is several different games in one!
+	Campaign
+	Survival
+	Scavenge
+	Extraction
+	More? I had some other ideas early on, but most of them were very similar to the above modes, so I simply merged them into what you see here. Maybe an Antlion Death-Match, or even Grub Racing?
+	
+Beta Testing - We aren't currently accepting new testers.
+
+
+Mapping - Take a look at our mapping documentation.
+
+Team/Contributors:
+	Grea$eMonkey - Creator.
+	Foszor - Contributed his "grubs" gamemode code which helped tremendously.
+	NightExcessive - Lua assistance.
+	Tobba - Lua assistance.
+	Antid2 - Concept artist.
+	anarcheril - Modeler/Animator.
+	TheMike - Skinner.
+
+I hope to make this into a source mod at some point.
+Check out the website too: http://www.antlionsurvival.com.

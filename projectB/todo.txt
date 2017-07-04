@@ -1,0 +1,111 @@
+A todo list of stuff in no particular order.
+	Add a + on the left side of the task when it's been completed.
+	Add a - on the left side of the task when you've attempted to do it but can't figure out why it doesnt work.
+	Add a ? on the left side of the task when you think the task is a debatable in terms of whether it should be completed at all.
+
+DONE:
++antlions being able jump when in the thumpers push radius
++antlions being able burrow when in the thumper's general radius
++antlions being unable to move when burrowed near thumper
++prediction problems with burrowing
++speed up burrowed movement for antlions
++make a working mounted turret for maps to replace func_tank since they won't work in multiplayer
+
+ATTEMPTED:
+-EXPERIENCING MAJOR FPS DROP WHEN BURROWED
+-antlions not doing damage on landing
+-player rendering problems
+-make impact effects under the antlions feet when it lands/moves
+-make thumper resistance higher as players get closer, but not truly stopping them - also make it harder to see as they get closer
+
+IDEAS:
+design a progress system
+add a melee attack to guns that does a push-back
+maybe make an ambush attack for antlions where they can pull rebels into the sand when burrowed?
+maybe add an incapacitation system like L4D?
+disable shooting while sprinting for rebels - maybe make their weapon lower too?
+
+
+TODO:
+redo antlion controls - these are my ideas.
+	melee	.	primary
+	melee2	.	secondary?
+	pounce	.	primary + sprint?
+	charge	.	secondary + sprint?
+	roar	.	reload
+	burrow	.	crouch
+	vision	.	flashlight?
+make a custom team selection panel
+make a better hud
+make a results screen
+add gib explosions for when antlions get killed
+add battle zone volume support
+add model clipping for when antlions are burrowing?
+add view punch for rebels when hit by antlion attacks
+add screen shivering for rebels when an antlion roars at them
+add pinned status for rebels when antlions pounce/land on them
+add subtle rumbling for rebels when burrowing antlions are near
+add sand-shooting for burrowed antlions
+add a dynamic damage system for rebels where damage to certain body parts makes certain abilities less effective.
+decide how scoring works for each team
+script antlion workers
+script the antlion guard
+script the antlion guardian
+finish scripting campaign mode
+script survival mode
+script scavenge mode
+script extraction mode
+move some of the keyvalues/inputs/outputs from some ents to another?
+	the time fraction keys from logic_antlion battle could be a completely different logic ent
+	the configuration keys from ENTITY_EVENTS_CLASS could also be a completely different logic ent
+make it so burrowing out starts at frame 10 in the sequence.
+disable team killing
+render a visual ring to represent thumper radiuses for antlions
+script the start-burrowed aspect of spawning
+
+
+BUGS:
+burrow logic not working
+	it should seem like there's a physical barrier wherever movement is meant to stop
+	traces shouldn't be allowing the player to get past a point where they need to move back to ply.LastValidPos
+antlions being able to see blood decals from first person view
+	this is because we are drawing the local player to get their shadow
+	is there some way we could not draw local player, but get their shadow?
+rebel shadows not appearing correctly - narwhal
+antlion attack animations not resetting frames before playing
+antlions freezing when damaged
+entity resetting and team flipping on round change
+spawn selection doesn't appear to work as intended
+gravgun flipping antlions doesn't work
+
+
+FEATURES:
+make rebel weapons
+	smg - keep default?
+	ar2 - keep default?
+	pistol - keep default?
+	crowbar - keep default?
+	grenades - keep default?
+	crossbow - keep default?
+	gravgun - no need to make a new one?
+	medkit - for medics
+	antlion guard shield - a shield crafted from an antlion guard's head
+	antlion sabers - predator-like blades made from antlion claws strapped to the forearm
+make rebel equipment
+	turret
+		can be picked up and moved again after deployment
+	mini-thumper
+		cannot be picked up again after being deployed
+	rollermine
+		modes: remote-controlled or auto-pilot
+		the view model could have an RT screen from which it can be controlled
+	hopper mines
+		can be picked up and moved again after deployment
+		
+make a screen effect for when thumper shockwaves hit you
+make burrowed view and effects
+make rebels visibility fade for antlions when they move slowly or aren't on sand, but when they are they are visible through solids when they are?
+add upgrade/buy system for weapons/ammo/equipment
+
+
+

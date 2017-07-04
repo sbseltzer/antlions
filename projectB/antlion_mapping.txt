@@ -1,0 +1,120 @@
+Entities to know:
+	info_player_start - Used in the rebel starting area
+	info_player_progress - Used throught the map to be activated by triggers
+	info_player_antlion - Used for antlion spawn
+	info_player_antlion_guard - Used for antlion guard spawn
+	logic_antlion_events - Used to relay specific game events
+	logic_antlion_battle - Used to control antlion battle zones
+	trigger_satisfy - Multi-purpose trigger primarily used for progress spawn activation
+	trigger_once - This can be used instead of trigger_satisfy in some cases
+	trigger_multiple - This can be used instead of trigger_satisfy in some cases
+	prop_thumper - Used to block certain areas off from antlions
+	
+Mapping for Campaign:
+	Starting out:
+		Make a logic_antlion_events entity and name it whatever you want. We'll call it GAME_EVENTS here.
+		Set the "Mode" key value by selecting "Campaign" if it's not already selected.
+	Making the rebel spawn area:
+		Make a spawn area enclosed from the rest of the map. This can be a physical enclosure and/or thumpers.
+		It is recommended that you place no less than 8 info_player_start entities in your spawn area.
+		Make sure that your exit from the spawn area is impossible to get back through once exited. A small ledge is often a good idea.
+		You should also make your exit have some sort of opening mechanism that starts out locked. A gate, door, shield, or some other obstruction is good. This makes it so players who spawn first can't rush out ahead.
+		When the game starts, there will be a pre-game period where the game waits for player to spawn, and your exit should be locked until this time ends.
+		Now you need to add an output to open your exit. You'll be using your logic_antlion_events entity.
+			Output: OnEndPreGame : <your_exit> : <your_open_mechanism>
+	Starting the Campaign:
+		Now make a trigger_once entity just outside your exit.
+		Now we add an output to the trigger_once that starts the campaign.
+			Output: OnStartTouch : GAME_EVENTS : StartGame
+		Placing your Antlion Spawns:
+			Arrange them to surround the path that rebels will move along so that rebels will often be ambushed by unburrowing antlions.
+			You'll want antlions to be spawning near rebels, so as rebels move through the map you should enable corresponding antlion spawns.
+			Make your first group of antlion spawns and name them antlion_spawns_01.
+			When you create your info_player_antlion entities, they will have their "Start Disabled" key value set to "Yes" by default. Leave it that way.
+			Your info_player_antlion entities will have the key values "Start Burrowed" ("Yes" by default) and "Unburrow on spawn" ("No" by default).
+			You may change "Unburrow on spawn" if you want antlions to instantly unburrow when they spawn, but this makes it hard for synchronized attacks.
+		Now we will add an output to our trigger_once entity to activate those spawns.
+			Output: OnStartTouch : antlion_spawns_01 : Enable
+		When a rebel player exits the spawn area and hits the trigger_once, the campaign will start and the first group of antlion spawns will enable.
+		You'll want to be doing this continually throughout your campaign.
+	Making Checkpoints:
+		Throughout your campaign, you may want checkpoints that activate info_player_progress spawns.
+		This allows rebels to spawn closer to their teammates after they've died.
+		NOTE:
+			Rebels will always spawn at the closest available (enabled and not blocked) info_player_progress spawn to the rebel group.
+			If you make all your progress spawns enabled by default rather than having them start disabled and enable via trigger, rebels will just spawn close to their group.
+			Same goes for antlion spawns.
+		Creating your info_player_progress entities:
+			Make a group of info_player_progress spawns and name them progress_spawns_01.
+			Now you have a choice of how they activate. The "Enable Type" keyvalue allows you to select who they activate for.
+			Select "Enable for activator" if you only want them to activate for the player who triggered the enabling.
+			Select "Enable for team" if you want them to activate for the entire team. It's set to this by default.
+			Depending on which you selected, you'll next want to choose your trigger entity.
+			If you chose "Enable for activator", you'll want to use a trigger_once entity.
+			If you chose "Enable for team", you'll want to use the trigger_satisfy entity.
+		Using the trigger_satisfy entity:
+			The trigger_satisfy entity is a custom brush entity that allows us to specify advanced satisfaction guidelines.
+			It will help to have some prior experience in GMod Lua.
+			Here's how it works:
+				You specify a table of entities (this can be achieved by using a function) to use as a "denominator".
+				You then specify a number between 0 and 1 to act as a "percentage".
+				Finally you specify what triggers a satisfaction check (starttouch, endtouch, touching).
+				Whenever an entity triggers a satisfaction check, it will see if it is part of our denominator.
+				If it is, it will be added to a table of entities used as a "numerator".
+				It will then check if the number of entities in the numerator table divided by the number of entities in the denominator table is more than or equal to the percentage number specified in the key values.
+				If it is more or equal, it will fire the OnTriggerSatisfied output.
+			Using it in this context:
+				Set your "Entity Denominator" to "team.GetAlivePlayers(TEAM_REBEL)". Note: team.GetAlivePlayers is a custom function defined in this gamemode.
+				Set your "Satisfaction check" to "Satisfy on start touch."
+				Set your "Satisfaction Percentage" to 0.5 (half the players on the rebel team).
+				Output: OnTriggerSatisfied : progress_spawns_01 : Enable
+				This will wait till half the players on the rebel team have touched this trigger and then enable the progress spawns.
+				This stops one player from rushing ahead to enable all the progress spawns.
+			You can also display a message to rebels by doing this:
+				Output: OnTriggerSatisfied : GAME_EVENTS : DisplayMessage : "You just passed a checkpoint!"
+	Creating a Battle Zone:
+		To stretch gameplay out in your campaigns, you may want to add intervals throughout the map where players need to really fight for survival.
+		To do such a thing, you'll want a logic_antlion_battle entity. Let's name it battle01.
+		There are often three parts to a battle zone:
+			The logic_antlion_battle entity.
+			A trigger entity to start the battle.
+			A trigger entity to end the battle.
+		Much like the beginning of the campaign, you'll want to make it so players cannot go backwards once they've entered the battle zone.
+		You can use a trigger_satisfy entity to ensure a certain percentage of rebels have entered it. This helps prevent rebel campers outside the battle zone.
+		There are three ways to end a battle:
+			Time - The battle will end when a timer ends.
+			Trigger - The battle will end when an output is triggered.
+			Either - The battle will end when either one happens.
+		These are selected with the "Battle End Type" key value.
+		If Time is selected, you may want to make an antlion guard spawn at a certain fraction of the way through the time limit. This can be achieved with the "Time Fraction #" keyvalue and "OnTimeFraction#" output.
+			Making an antlion guard spawn:
+				To make an antlion guard spawn half-way through the battle,
+				Make an info_player_antlion_guard entity wherever you want your antlion guard to spawn, and name it "battle01_antlionguardspawn".
+				Now go into your corresponding logic_antlion_battle entity set "Time Fraction 1" to 0.5, and add the following output:
+					Output: OnTimeFraction1 : GAME_EVENTS : ReleaseAntlionGuard : battle01_antlionguardspawn
+				This tells the game to spawn an antlion guard at the "battle01_antlionguardspawn" entity.
+		If Trigger is selected, you may want to make it a little more difficult to escape the battle zone. This is good for long stretches of land that are meant to be a blind rush for rebels.
+			In this case, you'll probably want to use a trigger_once to start the battle, and have it placed somewhere further into the battle zone so that antlions spawn in front and behind rebels.
+			Your output might look something like this:
+				Output: OnEndTouch : GAME_EVENTS : StartBattle : battle01
+			You'll want a trigger of some kind (probably a trigger_satisfy with the Percentage at 1) to end the battle and use the following output:
+				Output: OnTriggerSatisfied : GAME_EVENTS : EndBattle : battle01
+		If Either is selected, you will want to add both of the described end possibilities.
+	Ending the Campaign:
+		For this you will need a trigger_satisfy entity.
+		Using it in this context:
+			Set your "Entity Denominator" to "team.GetAlivePlayers(TEAM_REBEL)".
+			Set your "Satisfaction check" to "Satisfy while touching."
+			Set your "Satisfaction Percentage" to 1 (all of the players on the rebel team).
+			Output: OnTriggerSatisfied : GAME_EVENTS : EndGame : rebels
+			This will wait till all of the rebel players are actively touching this trigger, and then trigger the GameEnd output with "rebels" as the parrameter to signify rebel victory.
+		If you want to do a Left 4 Dead style ending with a safe-room door, make a door that triggers the EndGame output, but only if the OnTriggerSatisfaction output was fired.
+	
+	
+	
+	
+	
+	
+	
+	
+	

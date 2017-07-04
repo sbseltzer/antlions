@@ -1,0 +1,88 @@
+We want you to make maps for our upcomming Antlion Survival gamemode, where rebel survivors must fend off swarms of antlions.
+
+If you're thinking "I don't want to make a sandy coast map", stop right there, because you don't have to. It can literally be anything you want.
+Yes antlions can only burrow into sand, but you can define what [b][url=]MAT_* types[/url][/b] are considered sand in your map! You could make antlions able to burrow into metal if you want.
+
+Some general info:
+	Based on Narwhal. :3:
+	Uses game mechanics that are very similar to Left 4 Dead.
+	Designed to be played with 8-50+ players.
+	You can play on the rebel team, or the antlion team.
+	Players on the antlion team can also be Antlion Workers, Guards, and Guardians, but only on certain occasions.
+	Rebels will have lots of fun toys to play with, like portable thumpers, remote-controlled rollermines, and probably some other cool stuff my mind has yet to concieve.
+	There will be a public release.
+	
+Antlion Survival is actually a compound gamemode which consists of four different kinds of game play.
+[list]Campaign
+Resources have been depleted in the current rebel camp, but word is that there's another rebel camp somewhere across antlion country.
+The rebels will need to cross antlion country and avoid antlion ambushes. They may even need to take down a few antlion guards.
+All living rebels must make it from one end of the map to the other.
+[/list]
+[list]Scavenge
+The antlions seem to have burrowed through a powerline that keeps the defense line of thumpers powered. A team of mechanics are rerouting the power source, but it will take some time.
+To keep the thumpers powered, the rebels must venture outside the safty of their thumpers and find batteries to keep them charged until the power is back.
+If a thumper loses its charge it will die, and if too many of them die, the rebels will lose.
+[/list]
+[list]Survival
+The rebels are trapped right in the heart of antlion country with no defense. Their only hope is to defend themselves until an extraction team arrives.
+Antlions have an excellerated respawn time in this mode. Rebels do not respawn once they die.
+[/list]
+[list]Extraction
+This substance known as "The Extract" has proven very useful for rebel medicine. The rebels will need to invade the antlion hive and retrieve the extract.
+There may be a few antlion guard fights, and even a fight with the antlion guardian.
+[/list]
+
+Here's some media, just to show you that you're mapping for something that actually exists.
+[media]http://www.youtube.com/watch?v=gEWJZg-ib4M[/media]
+[media]http://www.youtube.com/watch?v=OdCjazdcjKE[/media]
+
+Now onto the technical shit for you mappers.
+I was a mapper once too, so I know how nice it is to have an FGD. Long-story short, I made you one - http://dl.dropbox.com/u/899872/antlion.fgd
+I also have a content pack with a simplified version of the gamemode that only contains game mechanic logic, which is probably what you'll be testing most of the time - http://dl.dropbox.com/u/899872/antlion.fgd
+
+I'm going to be honest with you, there's a lot of content there.
+
+How to map for Antlion Survival:
+
+General Info:
+Rebels spawn at info_player_start entities.
+Antlions spawn at info_player_antlion entities.
+You'll always need exactly one logic_antlion_events entity in your map. This controls game mechanics, so it's quite essential to game play.
+Map prefixes you can use include "al_*", "as_*", "als_*", and "antlion_*". Whichever you think rolls off your tongue better.
+Using prop_thumper entities is encouraged as long as they are beneficial to game play.
+	
+Things to keep in mind:
+Antlions can fly, so keep that in mind when designing maps. My content pack includes the antlion movement code, so you'll be able to get a feel for it yourself.
+	It would probably be best to use 3D skyboxes and strategically placed cliffs to prevent antlion players from trying to fly outside your map's boundaries, or maybe you'll want to use a trigger_push to simply force them from flying too high. I don't care, whatever you think works best.
+Antlions can burrow on sand/dirt surfaces, so I'm going to explain a little bit about how it works.
+	1. Antlions won't physically go underground. It will just appear that way. They will still collide with the world, so brush geometry and static props will block movement.
+	2. While burrowed, antlions won't be able to go off ledges of certain heights, go into water, or go onto surfaces that are not considered sand.
+	3. Antlions will not be able to travel into the radius of thumpers.
+	4. Antlions will not collide with entities above the ground.
+	5. If you make a brush or physical entity go deep enough under the ground, the player will collide with it. A good way to ensure antlion players stay within certain boundaries is by making a player clip brush under the surface. You should make it at least 32 units deep.
+Antlions cannot walk past a prop_thumper's radius, but they can fly past them. The thumper's EffectRadius is used as the radius in units (not inches) at which antlions can no longer pass it. Don't make it totally impossible for antlions to get past a thumper. At least give them an alternate route to take.
+Spawning works differently in this gamemode. Spawn points will often be selected based on the general location of other players.
+	Always use info_player_start for initial rebel spawn points, but for spawnpoints along the way, you must use the info_player_progress entity.
+	When the game is deciding where an antlion should spawn, it will always try to choose an info_player_antlion close to a small group of rebels. This means stragglers are pretty much doomed in this game, so it's stick together or die.
+	When the game is deciding where a rebel should spawn, it will always try to choose an info_player_progress close to a large group of rebels. Putting rebels with the group will make things much less frustrating for them.
+	Both of the special spawn points in this game have I/O values to enable/disable them. This allows you to do things like open up groups of spawnpoints as players progress in campaigns.
+	
+Some cool stuff you can do:
+	You can define which material types in your map are considered sand, which means you're not restricted to sandy coast map designs.
+	You can set special spawn delays for each team.
+	The FGD comes with a special trigger entity called trigger_satisfy. This entity is special because it won't be triggered unless certain conditions are met.
+	
+Mapping for Campaign Mode
+Mapping for Scavenge Mode
+Mapping for Survival Mode
+Mapping for Extraction Mode
+
+Or if you like looking at other people's work to learn, I have made example VMFs.
+Campaign: als_ca_example.vmf
+Scavenge: als_sc_example.vmf
+Survival: als_su_example.vmf
+Extraction: als_ex_example.vmf
+
+When naming your maps, your prefixes [i]should[/i], but are not required to, be followed by something which describes the mode. Examples: ca for campaign, sc for scavenge, su for survival, and ex for extraction. Please note that this does not determine what mode is played; you define that in your logic_antlion_events entity.
+
+

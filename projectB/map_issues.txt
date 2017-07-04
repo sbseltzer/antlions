@@ -1,0 +1,16 @@
+-thumpers start with button switched on, but thumper disabled
+-combine npc radio voices play when entering bunkers
+func_tank ents won't aim
+-lights should already be on - not triggered on
+-thumper4 is on by default - needs to be disabled
+-thumper4's ladder is broken
+itemcrates seem to have a delayed item spawn
+-flares should already be active - not triggered
+physical ramp is asleep - wake it up - maybe add a brush ramp over it
+the crakwhatevahssahjgf trigger push isn't activating
+reverse sounds - have sirens already playing and disable them when thumpers are activated
+add some prop_physics for humans to throw on sand
+-ledge at beginning is scalable, and rebels can get over the wall
+
+vvis took a while - lets optimize geometry
+20,782KB - lets make it not-so-big
