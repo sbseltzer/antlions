@@ -2,6 +2,8 @@
 
 The scattered remains of old GMod project that I made in 2010-ish, from the days before I used proper version control. Originally intended to be a gamemode of humans vs antlions. See the GDD file for details.
 
+It would be cool if this could be restored and expannded as an open source gamemode. If that's a vision you're interested in being a part of, or have questions about how to use this code for your own projects, please join the [![Gitter](https://badges.gitter.im/seltzy/antlions.svg)](https://gitter.im/seltzy/antlions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
+
 This repo is broken into a few segments that were scattered between various hard drive backups.
 
 ## The projectA/B/C folders
